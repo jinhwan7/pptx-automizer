@@ -78,6 +78,7 @@ export type ElementInfo = {
   getAltText: () => string;
   getTableInfo: () => TableInfo[];
   getXmlElement: () => XmlElement;
+  getTextByLine: () => string[];
 };
 
 export type ContentMapType = 'slideMaster' | 'slideLayout';

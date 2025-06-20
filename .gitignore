@@ -2,7 +2,7 @@
 node_modules/
 pptx/
 out/
-dist/
+# dist/
 
 ### Editor
 workspace.code-workspace

@@ -120,6 +120,7 @@ export class XmlSlideHelper {
       getText: () => XmlSlideHelper.parseTextFragments(slideElement),
       getTableInfo: () => XmlSlideHelper.readTableInfo(slideElement),
       getAltText: () => XmlSlideHelper.getImageAltText(slideElement),
+      getTextByLine: () => XmlSlideHelper.getTextByLine(slideElement),
     };
   }
 
@@ -157,6 +158,34 @@ export class XmlSlideHelper {
       textFragments.push(texts.item(t).textContent);
     }
     return textFragments;
+  }
+
+  static getTextByLine(shapeNode: XmlElement): string[] {
+    const txBody = XmlSlideHelper.getTextBody(shapeNode);
+    if(!txBody) {
+      return [];
+    }
+
+    const textFragmentsNoLineBreaks: string[] = [];
+    const paragraphs = txBody.getElementsByTagName('a:p');
+    for (let p = 0; p < paragraphs.length; p++) {
+      const paragraph = paragraphs.item(p);
+      for (const childNode of Array.from(paragraph.childNodes)) {
+        if (childNode.nodeType === 1) {
+          console.log(childNode.nodeName);
+        
+        }
+
+
+      }
+
+
+      // const texts = paragraph.getElementsByTagName('a:t');
+      // for (let t = 0; t < texts.length; t++) {
+      //   textFragmentsNoLineBreaks.push(texts.item(t).textContent);
+      // }
+    }
+    return textFragmentsNoLineBreaks;
   }
 
   static getNonVisibleProperties(shapeNode: XmlElement): XmlElement {
