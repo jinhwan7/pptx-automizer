@@ -446,6 +446,22 @@ export class XmlHelper {
     return null;
   }
 
+  static findByNameAndId(doc: Document, name: string, id: string): XmlElement {
+    const names = doc.getElementsByTagName('p:cNvPr');
+
+    for (const i in names) {
+      if (
+        names[i].getAttribute &&
+        names[i].getAttribute('name') === name &&
+        names[i].getAttribute('id') === id
+      ) {
+        return names[i].parentNode.parentNode as XmlElement;
+      }
+    }
+
+    return null;
+  }
+
   static findByCreationId(doc: Document, creationId: string): XmlElement {
     const creationIds = doc.getElementsByTagName('a16:creationId');
 

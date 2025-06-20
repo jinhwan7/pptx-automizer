@@ -27,6 +27,10 @@ export declare class XmlSlideHelper {
      * @param selector
      */
     getElement(selector: string): Promise<ElementInfo>;
+    getElementByNameAndId(selector: {
+        name: string;
+        id: string;
+    }): Promise<ElementInfo>;
     /**
      * Get an array of ElementInfo objects for all named elements on a slide.
      * @param filterTags Use an array of strings to filter the output array
@@ -37,6 +41,10 @@ export declare class XmlSlideHelper {
      * @return {string[]} An array of text element IDs.
      */
     getAllTextElementIds(useCreationIds?: boolean): string[];
+    getAllTextElementUniqueSelectors(): {
+        name: string;
+        id: string;
+    }[];
     static getElementInfo(slideElement: XmlElement): ElementInfo;
     /**
      * Retrieves a list of all named elements on a slide. Automation requires at least a name.
@@ -49,6 +57,10 @@ export declare class XmlSlideHelper {
     static getNonVisibleProperties(shapeNode: XmlElement): XmlElement;
     static getImageAltText(slideElement: XmlElement): string;
     static getElementName(slideElement: XmlElement): string;
+    static getElementUniqueSelector(slideElement: XmlElement): {
+        name: string;
+        id: string;
+    };
     static getElementCreationId(slideElement: XmlElement): string | undefined;
     /**
      * Parses local tag name to specify element type in case it is a 'graphicFrame'.

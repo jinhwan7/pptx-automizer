@@ -24,6 +24,7 @@ export declare class XmlHelper {
     static findByElementCreationId(archive: IArchive, path: string, creationId: string): Promise<XmlElement>;
     static findByElementName(archive: IArchive, path: string, name: string): Promise<XmlElement>;
     static findByName(doc: Document, name: string): XmlElement;
+    static findByNameAndId(doc: Document, name: string, id: string): XmlElement;
     static findByCreationId(doc: Document, creationId: string): XmlElement;
     static findFirstByAttributeValue(nodes: NodeListOf<ChildNode> | HTMLCollectionOf<XmlElement>, attributeName: string, attributeValue: string): XmlElement;
     static findByAttributeValue(nodes: NodeListOf<ChildNode> | HTMLCollectionOf<XmlElement>, attributeName: string, attributeValue: string): XmlElement[];

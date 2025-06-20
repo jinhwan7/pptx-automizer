@@ -65,6 +65,10 @@ export type ElementType =
 
 export type ElementInfo = {
   name: string;
+  uniqueSelector: {
+    name: string;
+    id: string;
+  };
   type: ElementType;
   id: string;
   position: {

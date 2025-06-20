@@ -71,6 +71,19 @@ export class XmlSlideHelper {
     return XmlSlideHelper.getElementInfo(shapeNode);
   }
 
+  async getElementByNameAndId(selector: {
+    name: string;
+    id: string;
+  }): Promise<ElementInfo> {
+    const shapeNode = XmlHelper.findByNameAndId(
+      this.slideXml,
+      selector.name,
+      selector.id,
+    );
+
+    return XmlSlideHelper.getElementInfo(shapeNode);
+  }
+
   /**
    * Get an array of ElementInfo objects for all named elements on a slide.
    * @param filterTags Use an array of strings to filter the output array
@@ -111,10 +124,28 @@ export class XmlSlideHelper {
     return elementIds;
   }
 
+  getAllTextElementUniqueSelectors(): { name: string; id: string }[] {
+    const elementSelectors: { name: string; id: string }[] = [];
+
+    try {
+      elementSelectors.push(
+        ...this.getAllElements(['sp'])
+          .filter((element) => element.hasTextBody)
+          .map((element) => element.uniqueSelector),
+      );
+    } catch (error) {
+      console.error(error);
+      throw new Error(`Failed to retrieve text element IDs: ${error.message}`);
+    }
+
+    return elementSelectors;
+  }
+
   static getElementInfo(slideElement: XmlElement): ElementInfo {
     return {
       name: XmlSlideHelper.getElementName(slideElement),
       id: XmlSlideHelper.getElementCreationId(slideElement),
+      uniqueSelector: XmlSlideHelper.getElementUniqueSelector(slideElement),
       type: XmlSlideHelper.getElementType(slideElement),
       position: XmlSlideHelper.parseShapeCoordinates(slideElement),
       hasTextBody: !!XmlSlideHelper.getTextBody(slideElement),
@@ -210,6 +241,16 @@ export class XmlSlideHelper {
     const cNvPr = XmlSlideHelper.getNonVisibleProperties(slideElement);
     if (cNvPr) {
       return cNvPr.getAttribute('name');
+    }
+  }
+
+  static getElementUniqueSelector(slideElement: XmlElement) {
+    const cNvPr = XmlSlideHelper.getNonVisibleProperties(slideElement);
+    if (cNvPr) {
+      return {
+        name: cNvPr.getAttribute('name'),
+        id: cNvPr.getAttribute('id'),
+      };
     }
   }
 

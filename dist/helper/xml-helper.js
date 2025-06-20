@@ -298,6 +298,17 @@ class XmlHelper {
         }
         return null;
     }
+    static findByNameAndId(doc, name, id) {
+        const names = doc.getElementsByTagName('p:cNvPr');
+        for (const i in names) {
+            if (names[i].getAttribute &&
+                names[i].getAttribute('name') === name &&
+                names[i].getAttribute('id') === id) {
+                return names[i].parentNode.parentNode;
+            }
+        }
+        return null;
+    }
     static findByCreationId(doc, creationId) {
         const creationIds = doc.getElementsByTagName('a16:creationId');
         for (const i in creationIds) {

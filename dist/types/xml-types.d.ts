@@ -44,6 +44,10 @@ export type TemplateSlideInfo = {
 export type ElementType = 'sp' | 'chart' | 'chartEx' | 'table' | 'pic' | 'cxnSp';
 export type ElementInfo = {
     name: string;
+    uniqueSelector: {
+        name: string;
+        id: string;
+    };
     type: ElementType;
     id: string;
     position: {

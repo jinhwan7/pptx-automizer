@@ -84,6 +84,12 @@ class XmlSlideHelper {
             return XmlSlideHelper.getElementInfo(shapeNode);
         });
     }
+    getElementByNameAndId(selector) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const shapeNode = xml_helper_1.XmlHelper.findByNameAndId(this.slideXml, selector.name, selector.id);
+            return XmlSlideHelper.getElementInfo(shapeNode);
+        });
+    }
     /**
      * Get an array of ElementInfo objects for all named elements on a slide.
      * @param filterTags Use an array of strings to filter the output array
@@ -119,10 +125,24 @@ class XmlSlideHelper {
         }
         return elementIds;
     }
+    getAllTextElementUniqueSelectors() {
+        const elementSelectors = [];
+        try {
+            elementSelectors.push(...this.getAllElements(['sp'])
+                .filter((element) => element.hasTextBody)
+                .map((element) => element.uniqueSelector));
+        }
+        catch (error) {
+            console.error(error);
+            throw new Error(`Failed to retrieve text element IDs: ${error.message}`);
+        }
+        return elementSelectors;
+    }
     static getElementInfo(slideElement) {
         return {
             name: XmlSlideHelper.getElementName(slideElement),
             id: XmlSlideHelper.getElementCreationId(slideElement),
+            uniqueSelector: XmlSlideHelper.getElementUniqueSelector(slideElement),
             type: XmlSlideHelper.getElementType(slideElement),
             position: XmlSlideHelper.parseShapeCoordinates(slideElement),
             hasTextBody: !!XmlSlideHelper.getTextBody(slideElement),
@@ -205,6 +225,15 @@ class XmlSlideHelper {
         const cNvPr = XmlSlideHelper.getNonVisibleProperties(slideElement);
         if (cNvPr) {
             return cNvPr.getAttribute('name');
+        }
+    }
+    static getElementUniqueSelector(slideElement) {
+        const cNvPr = XmlSlideHelper.getNonVisibleProperties(slideElement);
+        if (cNvPr) {
+            return {
+                name: cNvPr.getAttribute('name'),
+                id: cNvPr.getAttribute('id'),
+            };
         }
     }
     static getElementCreationId(slideElement) {
