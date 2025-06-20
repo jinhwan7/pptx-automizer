@@ -168,21 +168,29 @@ class XmlSlideHelper {
         if (!txBody) {
             return [];
         }
-        const textFragmentsNoLineBreaks = [];
+        const allLines = [];
         const paragraphs = txBody.getElementsByTagName('a:p');
         for (let p = 0; p < paragraphs.length; p++) {
             const paragraph = paragraphs.item(p);
+            let currentLine = '';
             for (const childNode of Array.from(paragraph.childNodes)) {
-                if (childNode.nodeType === 1) {
-                    console.log(childNode.nodeName);
+                const element = childNode;
+                if (element.nodeName === 'a:br') {
+                    allLines.push(currentLine);
+                    currentLine = '';
+                    continue;
+                }
+                //childeNode가 a:r이라면 또 그 안에서 a:t를 찾아서 텍스트를 추가한다.
+                if (element.nodeName === 'a:r') {
+                    const textNodes = element.getElementsByTagName('a:t');
+                    for (let t = 0; t < textNodes.length; t++) {
+                        currentLine += textNodes.item(t).textContent;
+                    }
                 }
             }
-            // const texts = paragraph.getElementsByTagName('a:t');
-            // for (let t = 0; t < texts.length; t++) {
-            //   textFragmentsNoLineBreaks.push(texts.item(t).textContent);
-            // }
+            allLines.push(currentLine);
         }
-        return textFragmentsNoLineBreaks;
+        return allLines;
     }
     static getNonVisibleProperties(shapeNode) {
         return shapeNode.getElementsByTagNameNS(exports.nsMain, 'cNvPr').item(0);

@@ -16,8 +16,10 @@ export const mapUriType = {
   'http://schemas.openxmlformats.org/drawingml/2006/table': 'table',
   'http://schemas.openxmlformats.org/drawingml/2006/chart': 'chart',
   'http://schemas.microsoft.com/office/drawing/2014/chartex': 'chartEx',
-  'http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject': 'oleObject',
-  'http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink': 'hyperlink',
+  'http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject':
+    'oleObject',
+  'http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink':
+    'hyperlink',
 };
 
 /**
@@ -162,30 +164,35 @@ export class XmlSlideHelper {
 
   static getTextByLine(shapeNode: XmlElement): string[] {
     const txBody = XmlSlideHelper.getTextBody(shapeNode);
-    if(!txBody) {
+    if (!txBody) {
       return [];
     }
 
-    const textFragmentsNoLineBreaks: string[] = [];
+    const allLines: string[] = [];
     const paragraphs = txBody.getElementsByTagName('a:p');
+
     for (let p = 0; p < paragraphs.length; p++) {
       const paragraph = paragraphs.item(p);
+      let currentLine = '';
       for (const childNode of Array.from(paragraph.childNodes)) {
-        if (childNode.nodeType === 1) {
-          console.log(childNode.nodeName);
-        
+        const element = childNode as XmlElement;
+        if (element.nodeName === 'a:br') {
+          allLines.push(currentLine);
+          currentLine = '';
+          continue;
         }
+        //childeNode가 a:r이라면 또 그 안에서 a:t를 찾아서 텍스트를 추가한다.
+        if (element.nodeName === 'a:r') {
+          const textNodes = element.getElementsByTagName('a:t');
 
-
+          for (let t = 0; t < textNodes.length; t++) {
+            currentLine += textNodes.item(t).textContent;
+          }
+        }
       }
-
-
-      // const texts = paragraph.getElementsByTagName('a:t');
-      // for (let t = 0; t < texts.length; t++) {
-      //   textFragmentsNoLineBreaks.push(texts.item(t).textContent);
-      // }
+      allLines.push(currentLine);
     }
-    return textFragmentsNoLineBreaks;
+    return allLines;
   }
 
   static getNonVisibleProperties(shapeNode: XmlElement): XmlElement {
@@ -239,7 +246,8 @@ export class XmlSlideHelper {
     }
 
     // Check for hyperlinks
-    const hasHyperlink = slideElementParent.getElementsByTagName('a:hlinkClick');
+    const hasHyperlink =
+      slideElementParent.getElementsByTagName('a:hlinkClick');
     if (hasHyperlink.length > 0) {
       type = 'Hyperlink';
     }
