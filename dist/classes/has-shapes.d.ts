@@ -106,6 +106,10 @@ export default class HasShapes {
      * @returns {Promise<string[]>} A promise that resolves to an array of text element IDs.
      */
     getAllTextElementIds(): Promise<string[]>;
+    getAllTextElementUniqueSelectors(): Promise<{
+        name: string;
+        id: string;
+    }[]>;
     /**
      * Asynchronously retrieves all elements from the slide.
      * @params filterTags Use an array of strings to filter parent tags (e.g. 'sp')

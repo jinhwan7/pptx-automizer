@@ -61,6 +61,13 @@ class HasShapes {
             return xmlSlideHelper.getAllTextElementIds(this.sourceTemplate.useCreationIds || false);
         });
     }
+    getAllTextElementUniqueSelectors() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const xmlSlideHelper = yield this.getSlideHelper();
+            // Get all text element IDs
+            return xmlSlideHelper.getAllTextElementUniqueSelectors();
+        });
+    }
     /**
      * Asynchronously retrieves all elements from the slide.
      * @params filterTags Use an array of strings to filter parent tags (e.g. 'sp')

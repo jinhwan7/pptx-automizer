@@ -170,6 +170,15 @@ export default class HasShapes {
     );
   }
 
+  async getAllTextElementUniqueSelectors(): Promise<
+    { name: string; id: string }[]
+  > {
+    const xmlSlideHelper = await this.getSlideHelper();
+
+    // Get all text element IDs
+    return xmlSlideHelper.getAllTextElementUniqueSelectors();
+  }
+
   /**
    * Asynchronously retrieves all elements from the slide.
    * @params filterTags Use an array of strings to filter parent tags (e.g. 'sp')
