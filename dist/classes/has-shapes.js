@@ -91,6 +91,12 @@ class HasShapes {
             return xmlSlideHelper.getElement(selector);
         });
     }
+    getElementByUniqueSelector(selector) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const xmlSlideHelper = yield this.getSlideHelper();
+            return xmlSlideHelper.getElementByUniqueSelector(selector);
+        });
+    }
     /**
      * Asynchronously retrieves the dimensions of the slide.
      * This function utilizes the XmlSlideHelper to get the slide dimensions.

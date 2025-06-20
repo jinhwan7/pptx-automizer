@@ -71,7 +71,7 @@ export class XmlSlideHelper {
     return XmlSlideHelper.getElementInfo(shapeNode);
   }
 
-  async getElementByNameAndId(selector: {
+  async getElementByUniqueSelector(selector: {
     name: string;
     id: string;
   }): Promise<ElementInfo> {

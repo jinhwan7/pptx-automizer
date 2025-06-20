@@ -122,6 +122,10 @@ export default class HasShapes {
      * @returns {Promise<ElementInfo>} A promise that resolves an ElementInfo object.
      */
     getElement(selector: string): Promise<ElementInfo>;
+    getElementByUniqueSelector(selector: {
+        name: string;
+        id: string;
+    }): Promise<ElementInfo>;
     /**
      * Asynchronously retrieves the dimensions of the slide.
      * This function utilizes the XmlSlideHelper to get the slide dimensions.

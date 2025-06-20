@@ -84,7 +84,7 @@ class XmlSlideHelper {
             return XmlSlideHelper.getElementInfo(shapeNode);
         });
     }
-    getElementByNameAndId(selector) {
+    getElementByUniqueSelector(selector) {
         return __awaiter(this, void 0, void 0, function* () {
             const shapeNode = xml_helper_1.XmlHelper.findByNameAndId(this.slideXml, selector.name, selector.id);
             return XmlSlideHelper.getElementInfo(shapeNode);

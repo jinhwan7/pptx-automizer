@@ -61,9 +61,16 @@ export interface ISlide {
 
   getElement(selector: FindElementSelector): Promise<ElementInfo>;
 
+  getElementByUniqueSelector(selector: {
+    name: string;
+    id: string;
+  }): Promise<ElementInfo>;
+
   getAllElements(filterTags?: string[]): Promise<ElementInfo[]>;
 
   getAllTextElementIds(): Promise<string[]>;
+
+  getAllTextElementUniqueSelectors(): Promise<{ name: string; id: string }[]>;
 
   getGeneratedElements(): GenerateElements[];
 

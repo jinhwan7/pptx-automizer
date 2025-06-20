@@ -201,6 +201,14 @@ export default class HasShapes {
     return xmlSlideHelper.getElement(selector);
   }
 
+  async getElementByUniqueSelector(selector: {
+    name: string;
+    id: string;
+  }): Promise<ElementInfo> {
+    const xmlSlideHelper = await this.getSlideHelper();
+    return xmlSlideHelper.getElementByUniqueSelector(selector);
+  }
+
   /**
    * Asynchronously retrieves the dimensions of the slide.
    * This function utilizes the XmlSlideHelper to get the slide dimensions.

@@ -27,7 +27,7 @@ export declare class XmlSlideHelper {
      * @param selector
      */
     getElement(selector: string): Promise<ElementInfo>;
-    getElementByNameAndId(selector: {
+    getElementByUniqueSelector(selector: {
         name: string;
         id: string;
     }): Promise<ElementInfo>;
