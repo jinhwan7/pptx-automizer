@@ -156,6 +156,23 @@ class HasShapes {
         this.addElementToModificationsList(presName, slideNumber, selector, 'modify', callback);
         return this;
     }
+    /**
+     * Select and modify a single element on an added slide using both name and numeric id for more precise targeting.
+     * This method is safer than modifyElement when there might be multiple elements with the same name.
+     * @param {object} uniqueSelector - Object containing both name and numeric id of the element.
+     * @param {string} uniqueSelector.name - Element's name on the slide.
+     * @param {string} uniqueSelector.id - Element's numeric id (the id attribute in p:cNvPr, e.g., "33").
+     * @param {ShapeModificationCallback | ShapeModificationCallback[]} callback - One or more callback functions to apply.
+     */
+    modifyElementByUniqueSelector(uniqueSelector, callback) {
+        const presName = this.sourceTemplate.name;
+        const slideNumber = this.sourceNumber;
+        // Create a custom selector string that combines both name and numeric id
+        // This will be handled by a custom finding strategy
+        const customSelector = `${uniqueSelector.name}#${uniqueSelector.id}`;
+        this.addElementToModificationsList(presName, slideNumber, customSelector, 'modify', callback);
+        return this;
+    }
     generate(generate, objectName) {
         this.generateElements.push({
             objectName,
@@ -240,6 +257,7 @@ class HasShapes {
         return __awaiter(this, void 0, void 0, function* () {
             for (const element of this.importElements) {
                 const info = yield this.getElementInfo(element);
+                console.log('info.mode', info.mode);
                 switch (info === null || info === void 0 ? void 0 : info.type) {
                     case element_type_1.ElementType.Chart:
                         yield new chart_1.Chart(info, this.targetType)[info.mode](this.targetTemplate, this.targetNumber, this.targetType);
@@ -326,6 +344,18 @@ class HasShapes {
         return __awaiter(this, void 0, void 0, function* () {
             const strategies = [];
             if (typeof selector === 'string') {
+                // Check if this is a custom selector with name#id format
+                if (selector.includes('#')) {
+                    const [name, id] = selector.split('#');
+                    const sourceElement = yield xml_helper_1.XmlHelper.findByElementNameAndId(sourceArchive, sourcePath, name, id);
+                    if (sourceElement) {
+                        return {
+                            sourceElement,
+                            selector: `${name}#${id}`,
+                            mode: 'findByElementNameAndId',
+                        };
+                    }
+                }
                 if (useCreationIds) {
                     strategies.push({
                         mode: 'findByElementCreationId',

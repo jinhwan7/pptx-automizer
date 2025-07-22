@@ -283,6 +283,12 @@ class XmlHelper {
             return XmlHelper.findByCreationId(slideXml, creationId);
         });
     }
+    static findByElementNameAndId(archive, path, name, id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const slideXml = yield XmlHelper.getXmlFromArchive(archive, path);
+            return XmlHelper.findByNameAndId(slideXml, name, id);
+        });
+    }
     static findByElementName(archive, path, name) {
         return __awaiter(this, void 0, void 0, function* () {
             const slideXml = yield XmlHelper.getXmlFromArchive(archive, path);

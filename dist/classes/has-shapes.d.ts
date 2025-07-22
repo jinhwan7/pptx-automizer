@@ -161,6 +161,18 @@ export default class HasShapes {
      * Depending on the shape type (e.g. chart or table), different arguments will be passed to the callback.
      */
     modifyElement(selector: FindElementSelector, callback: ShapeModificationCallback | ShapeModificationCallback[]): this;
+    /**
+     * Select and modify a single element on an added slide using both name and numeric id for more precise targeting.
+     * This method is safer than modifyElement when there might be multiple elements with the same name.
+     * @param {object} uniqueSelector - Object containing both name and numeric id of the element.
+     * @param {string} uniqueSelector.name - Element's name on the slide.
+     * @param {string} uniqueSelector.id - Element's numeric id (the id attribute in p:cNvPr, e.g., "33").
+     * @param {ShapeModificationCallback | ShapeModificationCallback[]} callback - One or more callback functions to apply.
+     */
+    modifyElementByUniqueSelector(uniqueSelector: {
+        name: string;
+        id: string;
+    }, callback: ShapeModificationCallback | ShapeModificationCallback[]): this;
     generate(generate: GenerateOnSlideCallback, objectName?: string): this;
     getGeneratedElements(): GenerateElements[];
     /**

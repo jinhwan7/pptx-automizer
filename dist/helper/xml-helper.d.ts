@@ -22,6 +22,7 @@ export declare class XmlHelper {
     static getTargetByRelId(archive: IArchive, relsPath: string, element: XmlElement, type: string): Promise<Target>;
     static isElementCreationId(selector: string): boolean;
     static findByElementCreationId(archive: IArchive, path: string, creationId: string): Promise<XmlElement>;
+    static findByElementNameAndId(archive: IArchive, path: string, name: string, id?: string): Promise<XmlElement>;
     static findByElementName(archive: IArchive, path: string, name: string): Promise<XmlElement>;
     static findByName(doc: Document, name: string): XmlElement;
     static findByNameAndId(doc: Document, name: string, id: string): XmlElement;

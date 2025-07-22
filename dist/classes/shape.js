@@ -130,8 +130,15 @@ class Shape {
             const archive = this.targetArchive;
             const slideFile = this.targetSlideFile;
             const targetSlideXml = yield xml_helper_1.XmlHelper.getXmlFromArchive(archive, slideFile);
-            const findMethod = this.hasCreationId ? 'findByCreationId' : 'findByName';
-            const sourceElementOnTargetSlide = yield xml_helper_1.XmlHelper[findMethod](targetSlideXml, this.name);
+            let sourceElementOnTargetSlide;
+            if (this.name.includes('#')) {
+                const [name, id] = this.name.split('#');
+                sourceElementOnTargetSlide = yield xml_helper_1.XmlHelper.findByNameAndId(targetSlideXml, name, id);
+            }
+            else {
+                const findMethod = this.hasCreationId ? 'findByCreationId' : 'findByName';
+                sourceElementOnTargetSlide = yield xml_helper_1.XmlHelper[findMethod](targetSlideXml, this.name);
+            }
             if (!(sourceElementOnTargetSlide === null || sourceElementOnTargetSlide === void 0 ? void 0 : sourceElementOnTargetSlide.parentNode)) {
                 console.error(`Can't modify slide tree for ${this.name}`);
                 return;
