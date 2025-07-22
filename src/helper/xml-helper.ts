@@ -424,6 +424,17 @@ export class XmlHelper {
     return XmlHelper.findByCreationId(slideXml, creationId);
   }
 
+  static async findByElementNameAndId(
+    archive: IArchive,
+    path: string,
+    name: string,
+    id?: string,
+  ): Promise<XmlElement> {
+    const slideXml = await XmlHelper.getXmlFromArchive(archive, path);
+
+    return XmlHelper.findByNameAndId(slideXml, name, id);
+  }
+
   static async findByElementName(
     archive: IArchive,
     path: string,

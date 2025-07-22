@@ -283,6 +283,36 @@ export default class HasShapes {
     return this;
   }
 
+  /**
+   * Select and modify a single element on an added slide using both name and numeric id for more precise targeting.
+   * This method is safer than modifyElement when there might be multiple elements with the same name.
+   * @param {object} uniqueSelector - Object containing both name and numeric id of the element.
+   * @param {string} uniqueSelector.name - Element's name on the slide.
+   * @param {string} uniqueSelector.id - Element's numeric id (the id attribute in p:cNvPr, e.g., "33").
+   * @param {ShapeModificationCallback | ShapeModificationCallback[]} callback - One or more callback functions to apply.
+   */
+  modifyElementByUniqueSelector(
+    uniqueSelector: { name: string; id: string },
+    callback: ShapeModificationCallback | ShapeModificationCallback[],
+  ): this {
+    const presName = this.sourceTemplate.name;
+    const slideNumber = this.sourceNumber;
+
+    // Create a custom selector string that combines both name and numeric id
+    // This will be handled by a custom finding strategy
+    const customSelector = `${uniqueSelector.name}#${uniqueSelector.id}`;
+
+    this.addElementToModificationsList(
+      presName,
+      slideNumber,
+      customSelector,
+      'modify',
+      callback,
+    );
+
+    return this;
+  }
+
   generate(generate: GenerateOnSlideCallback, objectName?: string): this {
     this.generateElements.push({
       objectName,
@@ -410,6 +440,7 @@ export default class HasShapes {
   async importedSelectedElements(): Promise<void> {
     for (const element of this.importElements) {
       const info = await this.getElementInfo(element);
+      console.log('info.mode', info.mode);
 
       switch (info?.type) {
         case ElementType.Chart:
@@ -543,6 +574,26 @@ export default class HasShapes {
   ): Promise<ElementOnSlide> {
     const strategies: FindElementStrategy[] = [];
     if (typeof selector === 'string') {
+      // Check if this is a custom selector with name#id format
+      if (selector.includes('#')) {
+        const [name, id] = selector.split('#');
+
+        const sourceElement = await XmlHelper.findByElementNameAndId(
+          sourceArchive,
+          sourcePath,
+          name,
+          id,
+        );
+
+        if (sourceElement) {
+          return {
+            sourceElement,
+            selector: `${name}#${id}`,
+            mode: 'findByElementNameAndId',
+          };
+        }
+      }
+
       if (useCreationIds) {
         strategies.push({
           mode: 'findByElementCreationId',

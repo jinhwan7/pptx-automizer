@@ -10,7 +10,10 @@ import {
 } from '../types/types';
 import { RootPresTemplate } from '../interfaces/root-pres-template';
 import { XmlDocument, XmlElement } from '../types/xml-types';
-import { ContentTypeExtension, ContentTypeMap } from '../enums/content-type-map';
+import {
+  ContentTypeExtension,
+  ContentTypeMap,
+} from '../enums/content-type-map';
 import { ElementSubtype } from '../enums/element-type';
 import IArchive from '../interfaces/iarchive';
 
@@ -196,12 +199,23 @@ export class Shape {
       slideFile,
     );
 
-    const findMethod = this.hasCreationId ? 'findByCreationId' : 'findByName';
+    let sourceElementOnTargetSlide: XmlElement;
 
-    const sourceElementOnTargetSlide = await XmlHelper[findMethod](
-      targetSlideXml,
-      this.name,
-    );
+    if (this.name.includes('#')) {
+      const [name, id] = this.name.split('#');
+      sourceElementOnTargetSlide = await XmlHelper.findByNameAndId(
+        targetSlideXml,
+        name,
+        id,
+      );
+    } else {
+      const findMethod = this.hasCreationId ? 'findByCreationId' : 'findByName';
+
+      sourceElementOnTargetSlide = await XmlHelper[findMethod](
+        targetSlideXml,
+        this.name,
+      );
+    }
 
     if (!sourceElementOnTargetSlide?.parentNode) {
       console.error(`Can't modify slide tree for ${this.name}`);
@@ -262,11 +276,7 @@ export class Shape {
       .getElementsByTagName('p:cSld')[0]
       .getElementsByTagName(this.relRootTag);
 
-    return XmlHelper.findByAttributeValue(
-      sourceList,
-      this.relAttribute,
-      rId,
-    );
+    return XmlHelper.findByAttributeValue(sourceList, this.relAttribute, rId);
   }
 
   async updateTargetElementRelId(): Promise<void> {

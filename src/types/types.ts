@@ -257,7 +257,10 @@ export type FindElementSelector =
       name: string;
     };
 export type FindElementStrategy = {
-  mode: 'findByElementCreationId' | 'findByElementName';
+  mode:
+    | 'findByElementCreationId'
+    | 'findByElementName'
+    | 'findByElementNameAndId';
   selector: string;
 };
 export type ImportedElement = {
@@ -285,7 +288,10 @@ export type AnalyzedElementType = {
 export type ElementOnSlide = {
   sourceElement: XmlElement;
   selector: string;
-  mode?: 'findByElementCreationId' | 'findByElementName';
+  mode?:
+    | 'findByElementCreationId'
+    | 'findByElementName'
+    | 'findByElementNameAndId';
 };
 export type TargetByRelIdMapParam = {
   relRootTag: string;

@@ -44,6 +44,11 @@ export interface ISlide {
     callback: ModificationCallback | ModificationCallback[],
   ): ISlide;
 
+  modifyElementByUniqueSelector(
+    uniqueSelector: { name: string; id: string },
+    callback: ModificationCallback | ModificationCallback[],
+  ): ISlide;
+
   /**
    * Use PptxGenJs to generate a new element from scratch on this slide.
    * @param generate Pass a callback to create an element on current slide
