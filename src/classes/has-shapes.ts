@@ -440,7 +440,6 @@ export default class HasShapes {
   async importedSelectedElements(): Promise<void> {
     for (const element of this.importElements) {
       const info = await this.getElementInfo(element);
-      console.log('info.mode', info.mode);
 
       switch (info?.type) {
         case ElementType.Chart:
